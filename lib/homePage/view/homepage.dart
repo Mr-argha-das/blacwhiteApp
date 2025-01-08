@@ -2,6 +2,8 @@ import 'package:blackandwhite/constant/mycolor.dart';
 import 'package:blackandwhite/homePage/view/allhomepage.dart';
 import 'package:blackandwhite/homePage/view/hitspage.dart';
 import 'package:blackandwhite/homePage/view/musichomepage.dart';
+import 'package:blackandwhite/searchpage/view/searchpage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -118,7 +120,9 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             actions: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.search_outlined, size: 28,)),
+              IconButton(onPressed: (){
+                Navigator.push(context, CupertinoPageRoute(builder: (context) => SearchPage()));
+              }, icon: const Icon(Icons.search_outlined, size: 28,)),
               const SizedBox(
                 width: 10,
               ),
