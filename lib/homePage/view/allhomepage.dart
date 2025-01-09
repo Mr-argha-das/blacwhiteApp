@@ -1,18 +1,22 @@
 import 'package:blackandwhite/constant/mycolor.dart';
+import 'package:blackandwhite/homePage/controller/homeController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AllHomePage extends StatefulWidget {
+class AllHomePage extends ConsumerStatefulWidget {
   const AllHomePage({super.key});
 
   @override
-  State<AllHomePage> createState() => _AllHomePageState();
+  _AllHomePageState createState() => _AllHomePageState();
 }
 
-class _AllHomePageState extends State<AllHomePage> {
+class _AllHomePageState extends ConsumerState<AllHomePage> {
   @override
   Widget build(BuildContext context) {
+    final artistsList = ref.watch(artistListShuflle);
+    final todaysSongsList = ref.watch(homeTodaysSongs);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -22,22 +26,28 @@ class _AllHomePageState extends State<AllHomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  MasonryGridView.count(
-                    itemCount: 8,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    itemBuilder: (context, index) {
-                      return const SongsTabs();
-                    },
-                  ),
+                  artistsList.when(
+                      data: (snapshot) => MasonryGridView.count(
+                            itemCount: snapshot.data.length,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            itemBuilder: (context, index) {
+                              return SongsTabs(
+                                image: snapshot.data[index].image,
+                                artistID: snapshot.data[index].id.oid,
+                                artistName: snapshot.data[index].name,
+                              );
+                            },
+                          ),
+                      error: (err, stack) => SizedBox(),
+                      loading: () => SizedBox()),
                   new SizedBox(
                     height: 30,
                   ),
-                  
                   Container(
                     height: 192,
                     width: MediaQuery.of(context).size.width,
@@ -64,8 +74,9 @@ class _AllHomePageState extends State<AllHomePage> {
                             height: 60,
                             width: 176,
                             decoration: const BoxDecoration(
-                              image: DecorationImage(image: AssetImage("aessts/imges/artistimage.png"))
-                            ),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "aessts/imges/artistimage.png"))),
                           ),
                           Text(
                             "Want playlist made for you?",
@@ -117,23 +128,32 @@ class _AllHomePageState extends State<AllHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text("Today’s biggest hits", style: GoogleFonts.inter(color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),)
+                      Text(
+                        "Today’s biggest hits",
+                        style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                   new SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    height: 210,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return SongsTabsDynamic();
-                      }),
-                  ),
+                  todaysSongsList.when(
+                      data: (snapshot) => Container(
+                            height: 210,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.songs.length,
+                                itemBuilder: (context, index) {
+                                  return SongsTabsDynamic(title: snapshot.songs[index].title, image: snapshot.songs[index].image, id: snapshot.songs[index].id, artistName: snapshot.songs[index].artists.name.toString(),);
+                                }),
+                          ),
+                      error: (err, stack) => SizedBox(),
+                      loading: () => SizedBox()),
                   new SizedBox(
                     height: 0,
                   ),
@@ -141,23 +161,32 @@ class _AllHomePageState extends State<AllHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text("Recents", style: GoogleFonts.inter(color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),)
+                      Text(
+                        "Recents",
+                        style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                   new SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    height: 210,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return SongsTabsDynamic();
-                      }),
-                  ),
+                  todaysSongsList.when(
+                      data: (snapshot) => Container(
+                            height: 210,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.songs.length,
+                                itemBuilder: (context, index) {
+                                  return SongsTabsDynamic(title: snapshot.songs[index].title, image: snapshot.songs[index].image, id: snapshot.songs[index].id, artistName: snapshot.songs[index].artists.name.toString(),);
+                                }),
+                          ),
+                      error: (err, stack) => SizedBox(),
+                      loading: () => SizedBox()),
                   new SizedBox(
                     height: 0,
                   ),
@@ -165,23 +194,32 @@ class _AllHomePageState extends State<AllHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text("More of what you like", style: GoogleFonts.inter(color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),)
+                      Text(
+                        "More of what you like",
+                        style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                   new SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    height: 210,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4,
-                      itemBuilder: (context, index) {
-                        return SongsTabsDynamic();
-                      }),
-                  ),
+                  todaysSongsList.when(
+                      data: (snapshot) => Container(
+                            height: 210,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.songs.length,
+                                itemBuilder: (context, index) {
+                                  return SongsTabsDynamic(title: snapshot.songs[index].title, image: snapshot.songs[index].image, id: snapshot.songs[index].id, artistName: snapshot.songs[index].artists.name.toString(),);
+                                }),
+                          ),
+                      error: (err, stack) => SizedBox(),
+                      loading: () => SizedBox()),
                 ],
               ),
             )));
@@ -189,7 +227,14 @@ class _AllHomePageState extends State<AllHomePage> {
 }
 
 class SongsTabs extends StatefulWidget {
-  const SongsTabs({super.key});
+  final String image;
+  final String artistID;
+  final String artistName;
+  const SongsTabs(
+      {super.key,
+      required this.image,
+      required this.artistID,
+      required this.artistName});
 
   @override
   State<SongsTabs> createState() => _SongsTabsState();
@@ -212,21 +257,22 @@ class _SongsTabsState extends State<SongsTabs> {
           Container(
             height: 50,
             width: 50,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(7),
                     bottomLeft: Radius.circular(7)),
                 image: DecorationImage(
-                    image: AssetImage('aessts/imges/anuvjain.png'),
-                    fit: BoxFit.cover)),
+                    image: NetworkImage(widget.image), fit: BoxFit.cover)),
           ),
           new SizedBox(
             width: 15,
           ),
-          Text(
-            "Anuv Jain",
-            style: GoogleFonts.inter(color: Colors.black, fontSize: 18),
+          Expanded(
+            child: Text(
+              widget.artistName,
+              style: GoogleFonts.inter(color: Colors.black, fontSize: 15),
+            ),
           )
         ],
       ),
@@ -234,9 +280,12 @@ class _SongsTabsState extends State<SongsTabs> {
   }
 }
 
-
 class SongsTabsDynamic extends StatefulWidget {
-  const SongsTabsDynamic({super.key});
+  final String title;
+  final String image;
+  final String id;
+  final String artistName;
+  const SongsTabsDynamic({super.key, required this.title, required this.image, required this.id, required this.artistName});
 
   @override
   State<SongsTabsDynamic> createState() => _SongsTabsDynamicState();
@@ -252,19 +301,36 @@ class _SongsTabsDynamicState extends State<SongsTabsDynamic> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 135 ,
+            height: 135,
             width: 135,
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              image: DecorationImage(image: AssetImage("aessts/imges/frame.png"), fit: BoxFit.cover)
-            ),
+            decoration:  BoxDecoration(
+                color: Colors.black,
+                image: DecorationImage(
+                    image: NetworkImage(widget.image),
+                    fit: BoxFit.cover)),
           ),
           SizedBox(
             height: 4,
           ),
-          Text("Jo Tum Mere Ho", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),),
-          
-          Text("Anuv jain", style: TextStyle(color: Colors.black, fontSize: 12,),),
+          Container(
+            width: 135,
+            child: Text(
+              widget.title,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            width: 135,
+            child: Text(
+              widget.artistName,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 12,
+              ),
+            ),
+          ),
         ],
       ),
     );
