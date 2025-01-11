@@ -20,7 +20,8 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
   Widget build(BuildContext context) {
     final artistsList = ref.watch(artistListShuflle);
     final todaysSongsList = ref.watch(homeTodaysSongs);
-        final suggestionSongs = ref.watch(sugggestionsongs);
+    final suggestionSongs = ref.watch(sugggestionsongs);
+    final userRecentSong = ref.watch(userRecentPlayedSong);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -144,7 +145,7 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                   todaysSongsList.when(
+                  todaysSongsList.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
@@ -154,11 +155,17 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
-                                    onTap: ()async{
-                                      // final apiService = HomeSerive(createDio());
-                                      // TestModel respone = await apiService.addtouserHistory("123456", snapshot.data[index].song.id.oid.toString());
-                                    },
-                                    child: SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,));
+                                      onTap: () async {
+                                        // final apiService = HomeSerive(createDio());
+                                        // TestModel respone = await apiService.addtouserHistory("123456", snapshot.data[index].song.id.oid.toString());
+                                      },
+                                      child: SongsTabsDynamic(
+                                        title: snapshot.data[index].song.title,
+                                        image: snapshot.data[index].song.image,
+                                        id: snapshot.data[index].song.id.oid,
+                                        artistName:
+                                            snapshot.data[index].artist.name,
+                                      ));
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
@@ -182,7 +189,7 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                   todaysSongsList.when(
+                  userRecentSong.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
@@ -191,7 +198,13 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
+                                  return SongsTabsDynamic(
+                                    title: snapshot.data[index].title,
+                                    image: snapshot.data[index].image,
+                                    id: snapshot.data[index].title,
+                                    artistName:
+                                        snapshot.data[index].artist.name,
+                                  );
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
@@ -215,7 +228,7 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                   suggestionSongs.when(
+                  suggestionSongs.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
@@ -224,10 +237,16 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.data[index].title, image: snapshot.data[index].image, id: "", artistName: snapshot.data[index].artist.name,);
+                                  return SongsTabsDynamic(
+                                    title: snapshot.data[index].title,
+                                    image: snapshot.data[index].image,
+                                    id: "",
+                                    artistName:
+                                        snapshot.data[index].artist.name,
+                                  );
                                 }),
                           ),
-                      error: (err, stack) => SizedBox(),
+                      error: (err, stack) => SizedBox(child: Text(err.toString()),),
                       loading: () => SizedBox()),
                 ],
               ),
@@ -294,7 +313,12 @@ class SongsTabsDynamic extends StatefulWidget {
   final String image;
   final String id;
   final String artistName;
-  const SongsTabsDynamic({super.key, required this.title, required this.image, required this.id, required this.artistName});
+  const SongsTabsDynamic(
+      {super.key,
+      required this.title,
+      required this.image,
+      required this.id,
+      required this.artistName});
 
   @override
   State<SongsTabsDynamic> createState() => _SongsTabsDynamicState();
@@ -312,11 +336,10 @@ class _SongsTabsDynamicState extends State<SongsTabsDynamic> {
           Container(
             height: 135,
             width: 135,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
                 color: Colors.black,
                 image: DecorationImage(
-                    image: NetworkImage(widget.image),
-                    fit: BoxFit.cover)),
+                    image: NetworkImage(widget.image), fit: BoxFit.cover)),
           ),
           SizedBox(
             height: 4,
@@ -327,7 +350,9 @@ class _SongsTabsDynamicState extends State<SongsTabsDynamic> {
               widget.title,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Container(

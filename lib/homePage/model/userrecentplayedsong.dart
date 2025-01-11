@@ -1,25 +1,25 @@
 // To parse this JSON data, do
 //
-//     final suggestionSongsModel = suggestionSongsModelFromJson(jsonString);
+//     final usrRecentPlayedSong = usrRecentPlayedSongFromJson(jsonString);
 
 import 'dart:convert';
 
-SuggestionSongsModel suggestionSongsModelFromJson(String str) => SuggestionSongsModel.fromJson(json.decode(str));
+UsrRecentPlayedSong usrRecentPlayedSongFromJson(String str) => UsrRecentPlayedSong.fromJson(json.decode(str));
 
-String suggestionSongsModelToJson(SuggestionSongsModel data) => json.encode(data.toJson());
+String usrRecentPlayedSongToJson(UsrRecentPlayedSong data) => json.encode(data.toJson());
 
-class SuggestionSongsModel {
+class UsrRecentPlayedSong {
     String message;
     List<Datum> data;
     int status;
 
-    SuggestionSongsModel({
+    UsrRecentPlayedSong({
         required this.message,
         required this.data,
         required this.status,
     });
 
-    factory SuggestionSongsModel.fromJson(Map<String, dynamic> json) => SuggestionSongsModel(
+    factory UsrRecentPlayedSong.fromJson(Map<String, dynamic> json) => UsrRecentPlayedSong(
         message: json["message"],
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
         status: json["status"],
@@ -33,24 +33,18 @@ class SuggestionSongsModel {
 }
 
 class Datum {
-    String artistsIDs;
-    String albumName;
+    String alubumName;
     String image;
     String title;
-    List<dynamic> genrieType;
-    String trackUrl;
-    List<dynamic> like;
+    List<String> like;
     int played;
     Artist artist;
     List<Track> track;
 
     Datum({
-        required this.artistsIDs,
-        required this.albumName,
+        required this.alubumName,
         required this.image,
         required this.title,
-        required this.genrieType,
-        required this.trackUrl,
         required this.like,
         required this.played,
         required this.artist,
@@ -58,12 +52,9 @@ class Datum {
     });
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        artistsIDs: json["artistsIDs"],
-        albumName: json["album_name"],
+        alubumName: json["alubum_name"],
         image: json["image"],
         title: json["title"],
-        genrieType: json["genrie_type"],
-        trackUrl: json["track_url"],
         like: List<String>.from(json["like"].map((x) => x)),
         played: json["played"],
         artist: Artist.fromJson(json["artist"]),
@@ -71,12 +62,9 @@ class Datum {
     );
 
     Map<String, dynamic> toJson() => {
-        "artistsIDs": artistsIDs,
-        "album_name": albumName,
+        "alubum_name": alubumName,
         "image": image,
         "title": title,
-        "genrie_type": genrieType,
-        "track_url": trackUrl,
         "like": List<dynamic>.from(like.map((x) => x)),
         "played": played,
         "artist": artist.toJson(),
@@ -128,9 +116,6 @@ class Id {
     };
 }
 
-
-
-
 class Track {
     Id id;
     String songId;
@@ -153,16 +138,4 @@ class Track {
         "songId": songId,
         "url": url,
     };
-}
-
-class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-            reverseMap = map.map((k, v) => MapEntry(v, k));
-            return reverseMap;
-    }
 }

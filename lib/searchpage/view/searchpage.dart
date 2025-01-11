@@ -1,18 +1,22 @@
 import 'package:blackandwhite/constant/mycolor.dart';
+import 'package:blackandwhite/searchpage/controller/searchController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends ConsumerState<SearchPage> {
+  List<Color> colorsFrame = [];
   @override
   Widget build(BuildContext context) {
+  final genretypes = ref.watch(genreTypes);
     return Scaffold(
       backgroundColor: backGroundColor,
       appBar: PreferredSize(
@@ -102,8 +106,8 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(
                 height: 20,
               ),
-              MasonryGridView.count(
-                itemCount: 8,
+              genretypes.when(data: (snapshot) => MasonryGridView.count(
+                itemCount:4,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -111,9 +115,9 @@ class _SearchPageState extends State<SearchPage> {
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
                 itemBuilder: (context, index) {
-                  return  StartBrowsingTab(backGroundColorColor: Color(0xFFFF82E6),);
+                  return  StartBrowsingTab(backGroundColorColor: Color(0xFFFF82E6), title: snapshot.data[index+11],);
                 },
-              )
+              ), error: (err, stack) => SizedBox(), loading: () => SizedBox()),
             ],
           ),
         ),
@@ -124,7 +128,8 @@ class _SearchPageState extends State<SearchPage> {
 
 class StartBrowsingTab extends StatefulWidget {
   final Color backGroundColorColor;
-  const StartBrowsingTab({super.key, required this.backGroundColorColor});
+  final String title;
+  const StartBrowsingTab({super.key, required this.backGroundColorColor, required this.title});
 
   @override
   State<StartBrowsingTab> createState() => _StartBrowsingTabState();
@@ -151,14 +156,16 @@ class _StartBrowsingTabState extends State<StartBrowsingTab> {
             top: 8,
             child: SizedBox(
               width: 103,
-              child: Text(
-                'Music',
-                style: GoogleFonts.inter(
-                  color: Colors.black,
-                  fontSize: 18,
-
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.90,
+              child: Center(
+                child: Text(
+                  widget.title,
+                  style: GoogleFonts.inter(
+                    color: Colors.black,
+                    fontSize: 18,
+                
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.90,
+                  ),
                 ),
               ),
             ),

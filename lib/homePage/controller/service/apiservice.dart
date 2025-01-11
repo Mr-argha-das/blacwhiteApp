@@ -3,6 +3,7 @@ import 'package:blackandwhite/homePage/model/homsetodayssongsmodel.dart';
 import 'package:blackandwhite/homePage/model/songsuggestionmodel.dart';
 import 'package:blackandwhite/homePage/model/testmodel.dart';
 import 'package:blackandwhite/homePage/model/todaysBigestSongModel.dart';
+import 'package:blackandwhite/homePage/model/userrecentplayedsong.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
@@ -26,4 +27,6 @@ abstract class HomeSerive {
     @Query('userid') String userid,
     @Query('songid') String songid,
   );
+  @GET("api/v1/user-song-history?userid=123456")
+  Future<UsrRecentPlayedSong> userRecetnSong();
 }
