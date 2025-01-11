@@ -17,6 +17,7 @@ class _MusicHomePageState extends ConsumerState<MusicHomePage> {
   Widget build(BuildContext context) {
     final artistsList = ref.watch(artistListShuflle);
     final todaysSongsList = ref.watch(homeTodaysSongs);
+    final suggestionSongs = ref.watch(sugggestionsongs);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -114,7 +115,7 @@ class _MusicHomePageState extends ConsumerState<MusicHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                  todaysSongsList.when(
+                  suggestionSongs.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
@@ -123,7 +124,7 @@ class _MusicHomePageState extends ConsumerState<MusicHomePage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
+                                  return SongsTabsDynamic(title: snapshot.data[index].title, image: snapshot.data[index].image, id: "", artistName: snapshot.data[index].artist.name,);
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),

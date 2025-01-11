@@ -1,5 +1,7 @@
 import 'package:blackandwhite/homePage/model/homeartistModel.dart';
 import 'package:blackandwhite/homePage/model/homsetodayssongsmodel.dart';
+import 'package:blackandwhite/homePage/model/songsuggestionmodel.dart';
+import 'package:blackandwhite/homePage/model/testmodel.dart';
 import 'package:blackandwhite/homePage/model/todaysBigestSongModel.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -17,4 +19,11 @@ abstract class HomeSerive {
   Future<SongResponse> getSong();
   @GET("api/v1/random-songs?page=1&limit=10")
   Future<ToddaysBiggestModel> todaysRecent();
+  @GET("api/v1/recommend_songs/123456?limit=15")
+  Future<SuggestionSongsModel> getSuggestionSong();
+  @GET("api/v1/add-song/user-history")
+  Future<TestModel> addtouserHistory(
+    @Query('userid') String userid,
+    @Query('songid') String songid,
+  );
 }

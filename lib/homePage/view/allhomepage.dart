@@ -1,5 +1,8 @@
+import 'package:blackandwhite/config/pretty.dio.dart';
 import 'package:blackandwhite/constant/mycolor.dart';
 import 'package:blackandwhite/homePage/controller/homeController.dart';
+import 'package:blackandwhite/homePage/controller/service/apiservice.dart';
+import 'package:blackandwhite/homePage/model/testmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -17,6 +20,7 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
   Widget build(BuildContext context) {
     final artistsList = ref.watch(artistListShuflle);
     final todaysSongsList = ref.watch(homeTodaysSongs);
+        final suggestionSongs = ref.watch(sugggestionsongs);
     return Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
@@ -149,7 +153,12 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
+                                  return GestureDetector(
+                                    onTap: ()async{
+                                      // final apiService = HomeSerive(createDio());
+                                      // TestModel respone = await apiService.addtouserHistory("123456", snapshot.data[index].song.id.oid.toString());
+                                    },
+                                    child: SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,));
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
@@ -206,7 +215,7 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                   todaysSongsList.when(
+                   suggestionSongs.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
@@ -215,7 +224,7 @@ class _AllHomePageState extends ConsumerState<AllHomePage> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
+                                  return SongsTabsDynamic(title: snapshot.data[index].title, image: snapshot.data[index].image, id: "", artistName: snapshot.data[index].artist.name,);
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
