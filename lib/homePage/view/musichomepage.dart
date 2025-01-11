@@ -67,9 +67,9 @@ class _MusicHomePageState extends ConsumerState<MusicHomePage> {
                             child: ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.songs.length,
+                                itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.songs[index].title, image: snapshot.songs[index].image, id: snapshot.songs[index].id, artistName: snapshot.songs[index].artists.name.toString(),);
+                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
@@ -87,16 +87,16 @@ class _MusicHomePageState extends ConsumerState<MusicHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                 todaysSongsList.when(
+                  todaysSongsList.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
                             child: ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.songs.length,
+                                itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.songs[index].title, image: snapshot.songs[index].image, id: snapshot.songs[index].id, artistName: snapshot.songs[index].artists.name.toString(),);
+                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
@@ -114,16 +114,16 @@ class _MusicHomePageState extends ConsumerState<MusicHomePage> {
                   new SizedBox(
                     height: 10,
                   ),
-                 todaysSongsList.when(
+                  todaysSongsList.when(
                       data: (snapshot) => Container(
                             height: 210,
                             width: MediaQuery.of(context).size.width,
                             child: ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.songs.length,
+                                itemCount: snapshot.data.length,
                                 itemBuilder: (context, index) {
-                                  return SongsTabsDynamic(title: snapshot.songs[index].title, image: snapshot.songs[index].image, id: snapshot.songs[index].id, artistName: snapshot.songs[index].artists.name.toString(),);
+                                  return SongsTabsDynamic(title: snapshot.data[index].song.title, image: snapshot.data[index].song.image, id: snapshot.data[index].song.id.oid, artistName: snapshot.data[index].artist.name,);
                                 }),
                           ),
                       error: (err, stack) => SizedBox(),
